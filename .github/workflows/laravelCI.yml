@@ -1,17 +1,16 @@
-name: laravelCI
+name: CI
 
-on: [pull_request, push]
+on: [push, pull_request]
 
 jobs:
-	build:
-		name: PHP ${{matrix.php-version}}
-		runs-on: ubuntu-latest
-		strategy:
-			fail-fast: true
-			matrix:
-				php-version: ['8.1','8.2']
+  build:
+    name: PHP ${{ matrix.php-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['8.1', '8.2']
 
-		steps:
+    steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
