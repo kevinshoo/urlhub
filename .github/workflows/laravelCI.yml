@@ -20,7 +20,7 @@ jobs:
         run: composer install --no-interaction --no-progress
       
       - name: Setup Configuration file
-        run: php -r copy('.env.example', '.env');
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
       - name: Generate Key
         run: php artisan key:generate
