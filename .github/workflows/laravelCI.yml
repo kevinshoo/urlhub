@@ -18,6 +18,7 @@ jobs:
 
       - name: Install/Update Dependencies
         run: composer install --no-interaction --no-progress
+      - run: nick-invision/retry@v2
       
       - name: Setup Configuration file
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
