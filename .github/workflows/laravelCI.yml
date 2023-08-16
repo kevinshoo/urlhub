@@ -18,7 +18,10 @@ jobs:
 
       - name: Install/Update Dependencies
         run: composer install --no-interaction --no-progress
-      - run: nick-invision/retry@v2
+      - uses: nick-invision/retry@v2
+        with: 
+          max_attempts: 3
+          command: npm install
       
       - name: Setup Configuration file
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
