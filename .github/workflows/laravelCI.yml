@@ -28,7 +28,10 @@ jobs:
       - name: Create Database
         run: 
             mkdir -p database
-            touch database/database.sqlite
+            touch database/database.mysql
       
       - name: Run Tests
+        env: 
+            DB_CONNECTION: mysql
+            DB_DATABASE: database/database.mysql
         run: ./vendor/bin/phpunit
