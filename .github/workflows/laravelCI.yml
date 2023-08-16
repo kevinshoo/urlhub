@@ -20,7 +20,7 @@ jobs:
         run: composer install --no-interaction --no-progress
       - uses: nick-invision/retry@v2
         with: 
-          timeout_second: 200
+          timeout_seconds: 200
           max_attempts: 3
           command: npm install
       
