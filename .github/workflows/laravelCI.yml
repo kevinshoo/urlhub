@@ -1,42 +1,56 @@
 name: CI
-on: [push, pull_request]
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
   build:
     name: PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         php-version: ['8.1']
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-      - uses: shivammathur/setup-php@v2
+        uses: actions/checkout@v2  # Use the latest version of checkout action
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          tools: composer:v2
+          extensions: all  # Install all PHP extensions for Laravel
+
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14  # Use a specific Node.js version compatible with Laravel
 
       - name: Setup Configuration file
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-      - name: Install/Update Dependencies
-        run: composer install --no-interaction --no-progress
-      - uses: nick-invision/retry@v2
-        with: 
-          timeout_seconds: 200
-          max_attempts: 3
-          command: npm install
-      
+      - name: Install Dependencies
+        run: |
+          composer install --no-interaction --no-progress
+          npm install --no-fund
+
       - name: Generate Key
         run: php artisan key:generate
 
       - name: Create Database
         run: |
-            mkdir -p database
-            touch database/database.sqlite
-      
+          mkdir -p database
+          touch database/database.sqlite
+
       - name: Run Tests
-        env: 
-            DB_CONNECTION: sqlite
-            DB_DATABASE: database/database.sqlite
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
         run: ./vendor/bin/phpunit
+
