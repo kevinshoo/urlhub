@@ -43,6 +43,11 @@ jobs:
           mkdir -p database
           touch database/database.sqlite
 
+      - name: Prepare
+        run: |
+          php artisan config:clear
+          npm run dev
+
       - name: Run Tests
         env:
           DB_CONNECTION: sqlite
