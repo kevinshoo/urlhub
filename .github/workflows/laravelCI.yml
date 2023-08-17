@@ -16,6 +16,9 @@ jobs:
           php-version: ${{ matrix.php-version }}
           tools: composer:v2
 
+      - name: Setup Configuration file
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
       - name: Install/Update Dependencies
         run: composer install --no-interaction --no-progress
       - uses: nick-invision/retry@v2
@@ -24,9 +27,6 @@ jobs:
           max_attempts: 3
           command: npm install
       
-      - name: Setup Configuration file
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
       - name: Generate Key
         run: php artisan key:generate
 
